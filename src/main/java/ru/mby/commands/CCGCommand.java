@@ -31,19 +31,56 @@ public class CCGCommand {
                 .then(literal("button")
                     .then(argument("name", StringArgumentType.string())
                         .then(argument("category", StringArgumentType.string())
-                            .executes(CCGCommand::removeButton))))));
+                            .executes(CCGCommand::removeButton)))))
+            .then(literal("cfg")
+                .then(literal("save")
+                    .then(argument("name", StringArgumentType.string())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ru.mby.data.ConfigManager.saveProfile(name);
+                            ctx.getSource().sendMessage(Text.literal("§aПрофиль '" + name + "' сохранён!"));
+                            return 1;
+                        })
+                    )
+                )
+                .then(literal("load")
+                    .then(argument("name", StringArgumentType.string())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ru.mby.data.ConfigManager.loadProfile(name);
+                            ctx.getSource().sendMessage(Text.literal("§aПрофиль '" + name + "' загружен!"));
+                            return 1;
+                        })
+                    )
+                )
+                .then(literal("default")
+                    .then(argument("name", StringArgumentType.string())
+                        .executes(ctx -> {
+                            String name = StringArgumentType.getString(ctx, "name");
+                            ru.mby.data.ConfigManager.setDefaultProfile(name);
+                            ctx.getSource().sendMessage(Text.literal("§aПрофиль '" + name + "' теперь загружается по умолчанию!"));
+                            return 1;
+                        })
+                    )
+                )
+            )
+        );
     }
     
     private static int addCategory(CommandContext<ServerCommandSource> context) {
         String name = StringArgumentType.getString(context, "name");
-        boolean success = CategoryManager.addCategory(name);
-        
-        if (success) {
-            context.getSource().sendMessage(Text.literal("§aКатегория '" + name + "' успешно добавлена!"));
-        } else {
-            context.getSource().sendMessage(Text.literal("§cКатегория '" + name + "' уже существует!"));
+        try {
+            boolean success = CategoryManager.addCategory(name);
+            if (success) {
+                context.getSource().sendMessage(Text.literal("§aКатегория '" + name + "' успешно добавлена!"));
+            } else {
+                context.getSource().sendMessage(Text.literal("§eКатегория '" + name + "' уже существует!"));
+            }
+        } catch (Exception e) {
+            context.getSource().sendMessage(Text.literal("§cПроизошла ошибка при добавлении категории!"));
+            System.err.println("[CCG] Ошибка при добавлении категории: " + e.getMessage());
+            e.printStackTrace();
         }
-        
         return 1;
     }
     
@@ -64,30 +101,36 @@ public class CCGCommand {
         String name = StringArgumentType.getString(context, "name");
         String category = StringArgumentType.getString(context, "category");
         String commands = StringArgumentType.getString(context, "commands");
-        
-        boolean success = ButtonManager.addButton(name, category, commands);
-        
-        if (success) {
-            context.getSource().sendMessage(Text.literal("§aКнопка '" + name + "' успешно добавлена в категорию '" + category + "'!"));
-        } else {
-            context.getSource().sendMessage(Text.literal("§cОшибка при добавлении кнопки. Проверьте, что категория существует."));
+        try {
+            boolean success = ButtonManager.addButton(name, category, commands);
+            if (success) {
+                context.getSource().sendMessage(Text.literal("§aКнопка '" + name + "' успешно добавлена в категорию '" + category + "'!"));
+            } else {
+                context.getSource().sendMessage(Text.literal("§eОшибка при добавлении кнопки. Проверьте, что категория существует и кнопка не дублируется."));
+            }
+        } catch (Exception e) {
+            context.getSource().sendMessage(Text.literal("§cПроизошла ошибка при добавлении кнопки!"));
+            System.err.println("[CCG] Ошибка при добавлении кнопки: " + e.getMessage());
+            e.printStackTrace();
         }
-        
         return 1;
     }
     
     private static int removeButton(CommandContext<ServerCommandSource> context) {
         String name = StringArgumentType.getString(context, "name");
         String category = StringArgumentType.getString(context, "category");
-        
-        boolean success = ButtonManager.removeButton(name, category);
-        
-        if (success) {
-            context.getSource().sendMessage(Text.literal("§aКнопка '" + name + "' успешно удалена из категории '" + category + "'!"));
-        } else {
-            context.getSource().sendMessage(Text.literal("§cКнопка '" + name + "' не найдена в категории '" + category + "'!"));
+        try {
+            boolean success = ButtonManager.removeButton(name, category);
+            if (success) {
+                context.getSource().sendMessage(Text.literal("§aКнопка '" + name + "' успешно удалена из категории '" + category + "'!"));
+            } else {
+                context.getSource().sendMessage(Text.literal("§eКнопка '" + name + "' не найдена в категории '" + category + "'!"));
+            }
+        } catch (Exception e) {
+            context.getSource().sendMessage(Text.literal("§cПроизошла ошибка при удалении кнопки!"));
+            System.err.println("[CCG] Ошибка при удалении кнопки: " + e.getMessage());
+            e.printStackTrace();
         }
-        
         return 1;
     }
 } 

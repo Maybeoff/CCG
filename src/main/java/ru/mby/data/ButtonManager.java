@@ -13,6 +13,7 @@ public class ButtonManager {
         }
         
         buttons.computeIfAbsent(category, k -> new HashMap<>()).put(name, commands);
+        if (!ru.mby.data.ConfigManager.isLoadingProfile) ConfigManager.saveConfig(); // Автоматически сохраняем
         return true;
     }
     
@@ -22,11 +23,13 @@ public class ButtonManager {
             return false;
         }
         categoryButtons.remove(name);
+        if (!ru.mby.data.ConfigManager.isLoadingProfile) ConfigManager.saveConfig(); // Автоматически сохраняем
         return true;
     }
     
     public static void removeCategoryButtons(String category) {
         buttons.remove(category);
+        if (!ru.mby.data.ConfigManager.isLoadingProfile) ConfigManager.saveConfig(); // Автоматически сохраняем
     }
     
     public static Map<String, String> getCategoryButtons(String category) {
@@ -43,5 +46,9 @@ public class ButtonManager {
             return null;
         }
         return categoryButtons.get(name);
+    }
+    
+    public static void clear() {
+        buttons.clear();
     }
 } 

@@ -11,6 +11,7 @@ public class CategoryManager {
             return false;
         }
         categories.add(name);
+        if (!ru.mby.data.ConfigManager.isLoadingProfile) ConfigManager.saveConfig(); // Автоматически сохраняем
         return true;
     }
     
@@ -21,6 +22,7 @@ public class CategoryManager {
         categories.remove(name);
         // Удаляем все кнопки из этой категории
         ButtonManager.removeCategoryButtons(name);
+        if (!ru.mby.data.ConfigManager.isLoadingProfile) ConfigManager.saveConfig(); // Автоматически сохраняем
         return true;
     }
     
@@ -30,5 +32,9 @@ public class CategoryManager {
     
     public static boolean hasCategory(String name) {
         return categories.contains(name);
+    }
+    
+    public static void clear() {
+        categories.clear();
     }
 } 

@@ -15,7 +15,11 @@ public class NoBlurMixin {
         cancellable = true
     )
     private void disableBlur(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        // Отменяем вызов renderBackground, чтобы убрать блюр
-        ci.cancel();
+        Screen screen = (Screen) (Object) this;
+        if (screen instanceof ru.mby.gui.CustomClickGuiScreen) {
+            context.fill(0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight(), 0x80000000);
+            ci.cancel();
+        }
+        // Для остальных экранов оставляем стандартное поведение
     }
 } 
