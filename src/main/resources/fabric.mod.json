@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "ccg",
+  "version": "${version}",
+  "name": "Custom Click GUI",
+  "description": "Кастомное GUI меню с возможностью выполнения команд",
+  "authors": ["mby"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/ccg/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "ru.mby.client.ccgDataGenerator"
+    ],
+    "client": [
+      "ru.mby.client.CCGClient"
+    ],
+    "main": [
+      "ru.mby.CCG"
+    ]
+  },
+  "mixins": [
+    "ccg.mixins.json",
+    {
+      "config": "ccg.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

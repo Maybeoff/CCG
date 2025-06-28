@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "ru/mby/mixins/NoBlurMixin": {
+      "renderBackground(Lnet/minecraft/client/gui/DrawContext;IIF)V": "Lnet/minecraft/class_437;method_25420(Lnet/minecraft/class_332;IIF)V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "ru/mby/mixins/NoBlurMixin": {
+        "renderBackground(Lnet/minecraft/client/gui/DrawContext;IIF)V": "Lnet/minecraft/class_437;method_25420(Lnet/minecraft/class_332;IIF)V"
+      }
+    }
+  }
+}
